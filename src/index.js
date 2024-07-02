@@ -1,17 +1,51 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Registration from './components/Registration';
+import Login from './components/Login';
+import Main from './components/Main';
+import PostDetails from './components/PostDetails';
+import Profile from './components/Profile';
+import CreatePosts from './components/CreatePosts';
+
+
+const appRouter = createBrowserRouter([
+  {
+      path:"/",
+      element:<App/>,
+      children:[
+          {
+              path:"/",
+              element:<Registration/>
+          },
+          {
+            path:"/login",
+            element:<Login/>
+          },
+          {
+            path:"/main",
+            element:<Main/>
+          },
+          {
+            path:"/createPosts",
+            element:<CreatePosts/>
+          },
+          {
+            path:"/profile/:userId",
+            element:<Profile/>
+          },
+          {
+            path:"/posts/:postId",
+            element:<PostDetails/>
+          },
+        ],
+  },
+]);
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <RouterProvider router={appRouter}/>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
