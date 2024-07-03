@@ -9,8 +9,13 @@ const Profile = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const handleDelete = ()  =>{
-    
+  const handleDelete = (postId)  =>{
+    try{
+      axios.delete(`${BASE_URL}/api/posts/${postId}`);
+      setPosts(posts.filter(post=>post.postId!==postId));
+    }catch(error){
+      console.error('Error deleting post:',error)
+    }
   }
   
   const handleEdit = () => {
@@ -68,8 +73,8 @@ const Profile = () => {
                         </Link>
                       </div>
                       <div>
-                        <button onClick={handleEdit} className='text-3xl'>📝</button>
-                        <button onClick={handleDelete}  className='text-3xl'>🗑️</button>
+                        <button onClick={()=>handleEdit(post.postId)} className='text-3xl'>📝</button>
+                        <button onClick={()=>handleDelete(post.postId)}  className='text-3xl'>🗑️</button>
                       </div>
                     </li>
                
