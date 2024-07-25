@@ -1,19 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../utils/constants';
+import { useParams } from 'react-router-dom';
 import UserContext from '../utils/UserContext';
 
-const CreatePosts = () => {
+const EditPost = () => {
 
+    const { postId } = useParams();
     const { user } = useContext(UserContext);
 
-    const [categories, setCategories] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState('');
-   
 
   const [formData, setFormData] = useState({
     title: '',
-    content: ''
+    content: '',
   });
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -29,9 +28,9 @@ const CreatePosts = () => {
   const handleSubmit = async (e) => {
 
     e.preventDefault();
-    if(user && selectedCategory){
+    if(user){
         try {  
-            const response = await axios.post(`${BASE_URL}/api/user/${user.id}/category/${selectedCategory}/posts`, formData);
+            const response = await axios.put(`${BASE_URL}/api/posts/${postId}`,formData);            
             console.log(response);
             setMessage('Posted Succesfully');
             setFormData({ title: '', content: '' });
@@ -41,37 +40,36 @@ const CreatePosts = () => {
     }else{
         if(!user)
         setError('Please login');
-        else if(!selectedCategory)
-        setError('Please select a category');
         else
         setError('Some unknown error occured');
     }
   
   };
 
-  const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
-  };
   
-  useEffect(()=>{
-    const fetchCategories = async () => {
-        try {
-          const response = await axios.get(`${BASE_URL}/api/categories/`);
-          setCategories(response.data);
-        } catch (error) {
-          console.error('Error fetching categories:', error);
-        }
-      };
-  
-      fetchCategories();
-      
-  },[]);
-  
+   useEffect(() => {
+
+    const fetchPostData = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/posts/${postId}`);
+        setFormData({
+          title: response.data.title,
+          content: response.data.content
+        });
+      } catch (error) {
+        console.error('Error fetching post:', error);
+        setError('Error fetching post data');
+      }
+    };
+
+    fetchPostData();
+  }, [postId]);
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 m-20  rounded-lg shadow-md w-full ">
-        <h2 className="text-2xl font-bold mb-6 text-center">CreatePosts</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Edit Post</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700">Title:</label>
@@ -83,21 +81,6 @@ const CreatePosts = () => {
               required 
               className="mt-1 p-2 w-full border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
             />
-          </div>
-          
-          
-          <div className="mb-4">
-            <label className="block text-gray-700">Category:</label>
-            <select
-                className="p-2 border rounded-lg focus:outline-none"
-                value={selectedCategory}
-                onChange={handleCategoryChange}
-            >
-                <option>Select category</option>
-                {categories.map(category => (
-                    <option key={category.categoryId} value={category.categoryId}>{category.categoryTitle}</option>
-                ))}
-            </select>
           </div>
 
 
@@ -115,7 +98,7 @@ const CreatePosts = () => {
             type="submit" 
             className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
           >
-            Create Post
+            Edit Post
           </button>
         </form>
         {message && <p className="mt-4 text-center text-green-500">{message}</p>}
@@ -125,4 +108,4 @@ const CreatePosts = () => {
   );
 };
 
-export default CreatePosts;
+export default EditPost;

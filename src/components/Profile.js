@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../utils/constants';
 
 const Profile = () => {
+
+  const navigate = useNavigate();
+
   const { userId } = useParams();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -18,8 +21,8 @@ const Profile = () => {
     }
   }
   
-  const handleEdit = () => {
-    
+  const handleEdit = (postId) => {
+    navigate(`/editPost/${postId}`);
   }
 
   useEffect(() => {

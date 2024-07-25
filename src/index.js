@@ -8,6 +8,7 @@ import Main from './components/Main';
 import PostDetails from './components/PostDetails';
 import Profile from './components/Profile';
 import CreatePosts from './components/CreatePosts';
+import EditPost from './components/EditPost';
 
 
 const appRouter = createBrowserRouter([
@@ -30,6 +31,10 @@ const appRouter = createBrowserRouter([
           {
             path:"/createPosts",
             element:<CreatePosts/>
+          },
+          {
+            path:"/editPost/:postId",
+            element:<EditPost/>
           },
           {
             path:"/profile/:userId",

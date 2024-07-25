@@ -6,9 +6,9 @@ import UserContext from '../utils/UserContext';
 
 const Login = () => {
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const { loginUser } = useContext(UserContext);
+  const { loginUser } = useContext(UserContext);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -36,7 +36,7 @@ const Login = () => {
         loginUser(user);
         navigate("/main");
       } else {
-        setMessage('Invalid email or password');
+        setError('Invalid email or password');
       }
     } catch (error) {
       setError('Error logging in');
