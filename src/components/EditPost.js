@@ -6,17 +6,16 @@ import UserContext from '../utils/UserContext';
 
 const EditPost = () => {
 
-    const { postId } = useParams();
-    const { user } = useContext(UserContext);
-
+  const { postId } = useParams();
+  const { user } = useContext(UserContext);
 
   const [formData, setFormData] = useState({
     title: '',
     content: '',
   });
+
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-
 
   const handleChange = (e) => {
     setFormData({
